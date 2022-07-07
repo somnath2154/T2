@@ -1,0 +1,414 @@
+Q1. Differrance between subquery and corelational query:
+Answer:
+In subqueries the inner queries are executed first and then the outer query is executed  
+In Correlated Subquery outer query is always dependent on inner query so first outer query is executed then inner query is executed
+
+********************************************
+Q2. Write query to time upcoming friday
+Answer:
+********************************************
+
+
+Q3. Diff between rank and  dense_rank ?
+Answer:
+Rank() -- Rank function skips ranking if there is same value or number.
+Dense_Rank() --It will not skips ranking if their is same value or number.
+
+We have created a table with the name exam result in which data is included of the students. Student name, subject and marks are included in the table.
+---------------example for rank--------------
+ SELECT Studentname, 
+       Subject, 
+       Marks, 
+       RANK() OVER(ORDER BY Marks ) Rank
+FROM ExamResult
+ORDER BY Rank;
+
+---------example for dense rank----------------
+
+SELECT Studentname, 
+       Subject, 
+       Marks, 
+       DENSE_RANK() OVER(ORDER BY Marks DESC) Rank
+FROM ExamResult
+ORDER BY Rank;
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+Q4. How to display bottom 5 from records
+Answer:select * from department_1 where empId in (select top 5 empId from department_1 order by empId desc)
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+Q5. What is diff between alter and update:
+
+Answer:
+
+Alter	                                                            
+ALTER command is Data Definition Language (DDL).	
+ALTER Command is used to add, delete, modify the        
+attributes of the relations (tables) in the database.	
+ALTER Command by default initializes values of all      
+the tuple as NULL.	
+This command make changes with table structure	         
+Example : Table structure, Table Name, SP,               
+functions etc 
+
+ Update:
+
+UPDATE Command is a Data Manipulation Language (DML)
+Update command will perform on the data level.
+UPDATE Command sets specified values in the command to the tuples.
+This command makes changes with data inside the table.
+Example : Change data in the table in rows or in column etc.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Q6. How to disply dept wise min salary
+
+select dept,min(SALARY) as MinSAL from department_1 group by dept
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Q7. Diff between  DCL and TCL
+
+
+DCL is abbreviation of Data Control Language. It is used to create roles, permissions, 
+and referential integrity as well it is used to control access to database by securing it. 
+
+TCL is abbreviation of Transactional Control Language. 
+It is used to manage different transactions occurring within a database
+
+Q8. How to display the city name not equal to vowels
+
+select city from table where city like [^aeiou]%
+
+
+Q9. How to display the city name not equal to vowels by using substring
+--  select city from firstTable where sustring(city,1,1) not in ('A','E','I','O', 'U');
+
+Q10. Write the query update all employee salary by 10%
+--  UPDATE Employee SET Salary = Salary + (Salary * 10/100);
+
+Q11. How to display the duplicate records
+--  select Fid, count(*) from firstTable group by Fid having count(*)>1;
+
+Q12. Diff between in-not in-exists
+     *In*
+  --This operator will allow you to navigate or point out the values which mentained or mentioned inside the in clause.
+  --syntax- select * from table_name where coln in (Records);
+
+    *Not in*
+  --Not In operator will perform vice-versa opeartion as compared to IN opeartor.
+  --syntax- select * from table_name where coln Not in (Records);
+  
+   *Exist*
+  --Query within query i.e outer query(OQ) and inside inner query(IQ).
+  --IQ is dependent on outer query.
+  --It follows top down up approach.
+
+Q13. what is diff between inner join and equi join
+    **Inner join**                                           
+  --This join return the only                              
+    matching records from Table                            
+  
+  --In this join "JOIN" keyword                            
+    is mandatory                                             
+  --Syntax:    
+  select */Column_name(s) from Table_Name1
+  INNER JOIN /JOIN Table_Name2 
+  ON Table_Name1.Column_name =Table_Name2.Column_name 
+
+**Equi Join**   
+--Equi_join is join but without using a join keyword we can join the two or more tables.
+--While writing Equi-join will use where clause  
+--Syntax 
+select * from T1,T2,T3 where T1.Coln=T2.coln and T2.Coln =T3.Coln                                                  
+
+
+Q14. Explain set operator
+    There is notes of it:
+  --1.Each select statement or table within UNION must have the same number of columns.
+  --2.The columns must have similar data types.
+  --3.The columns is SELECT statement or table must be in the same order.
+
+  --There are four types of operators
+  1.Union
+  2.union all
+  3.INTERSECT
+  4.EXCEPT
+ 1.Union
+ --In union operator unique record display or fetch
+   For ex.
+  A=[1,2,3,4,5]
+  B=[3,4,5,6,7]
+  A union B then output is [1,2,3,4,5,6,7]
+ --union syntax is select * from Table_name1 union select * from Table_name2
+
+ 2.union all
+  --This operator is used to combine two or more tables using select statement when both the tables have same no. of columns.
+  --Combine the two or more tables with all the values. it means that it will allow duplicate values in it.
+
+  select * from Table_name1
+ Union  all
+ select * from Table_name2
+
+  3.Intersect
+  --It will return only distinct (common records) values from two or more tables.
+
+  select * from Table_name1
+ intersect
+ select * from Table_name2
+
+  4.Except
+  --It will display the difference in records.
+  For ex: A = [1,2,3] and B= [3,4,5]
+  then A except B - O/P =[1,2]
+  then B except A - O/P =[4,5]
+
+ Syntax
+  select * from Table_name1
+ Except
+ select * from Table_name2
+  -- thi is all about set operator.
+ 
+Q15. How to display name whose first and last character is T
+  --select name from employee where name like 'T%T';
+
+Q16. How willyou identify, how many records are missinging target system as compared to source system
+  --we will compare count of source table and targrt table then find out missing record
+
+
+Q17. Display the 4th highest salary using subquery and dense_rank 
+
+using subquery:-
+
+select max(salary) as Max from table_nm where salary <
+(select max(salary) from table_nm where salary <
+(select max(salary) from table_nm where salary<
+(select max(salary) from table_nm)))
+
+using dense_rank:-
+
+with new_rank as
+(select *,dense_rank() over (order by salary desc) as MaxSal from table_nm)
+select * from new_rank where MaxSal=4
+
+Q18. How to fetch common records from 2 or more tables
+
+select * from t1 inner join t1 on t1.colnm=t2.colnm inner join t3 on t2.colnm=t3.colnm
+
+
+**************************************************************
+Q19. List student name who are living in same city
+
+select * from table1 inner join table2 on table1.city=table2.city
+
+Q20. What is diff between 'where and having'?
+
+where:-
+                                                    
+--WHERE clause applies to individual rows		         
+--it works on rows data,not on aggregated data                   
+
+having:-  
+
+--A HAVING clause is like a where clause,but applies only to groups as a whole  
+--HAVING clause works on aggregated data     
+
+Q21. How to calculate count of employee  from each dept?
+
+select * from department_1
+select dept,count(name) from department_1 group by dept
+
+Q22. If you have yearly salary then how to display the monthly salar
+
+select *,monthlysal=(salary/12) from department_1
+
+Q23. Display the the dept wise rank salary.
+
+select dept,salary,rank() over ( partition by dept order by salary) as Rank_salary from department_1
+
+Q24. Find the sum salary of each dept and order by desc?
+
+select dept,sum(salary) from department_1 group by dept order by sum(salary) desc
+
+
+Q25. Query to join 5 tables.
+
+ -- SYNTAX:-
+
+SELECT * / COLUMN_NAME(S)
+FROM TABLE_1
+JOIN TABLE_2
+ON TABLE_1.COLUMN_NAME = TABLE_2.COLUMN_NAME
+JOIN TABLE_3
+ON TABLE_2.COLUMN_NAME = TABLE_3.COLUMN_NAME
+JOIN TABLE_4
+ON TABLE_3.COLUMN_NAME = TABLE_4.COLUMN_NAME
+JOIN TABLE_5
+ON TABLE_4.COLUMN_NAME = TABLE_5.COLUMN_NAME;
+
+--OR 
+
+SELECT * / COLUMN_NAME(S)
+FROM TABLE_1, TABLE_2, TABLE_3, TABLE_4,TABLE_5
+WHERE
+TABLE_1.COLUMN_NAME = TABLE_2.COLUMN_NAME
+AND
+TABLE_2.COLUMN_NAME = TABLE_3.COLUMN_NAME
+AND
+TABLE_3.COLUMN_NAME = TABLE_4.COLUMN_NAME
+AND 
+TABLE_4.COLUMN_NAME = TABLE_5.COLUMN_NAME;
+
+--- EXAMPLE
+
+ TABLE 1 = DEPARMENTS (DEPT_ID,DEPT_NAME,MANAGER_ID,LOC_ID)
+ TABLE 2 = EMPLOYEES (EMP_ID,FIRST_NAME,LAST_NAME,DEPT_ID,MANAGER_ID)
+ TABLE 3 = LOCATIONS (LOC_ID,ADDRESS,CITY,COUNTRY_ID)
+ TABLE 4 = COUNTRIES (COUNTRY_ID,COUNTRY_NAME,REGION_ID)
+ TABLE 5 = REGIONS (REGION_ID,REGION_NAME)
+
+ -- QUERY:-
+
+ SELECT DEPARTMENTS D,EMPLOYEES E,LOCATIONS L,COUNTRIES C, REGIONS R
+WHERE D.DEPT_ID = E.DEPT_ID
+ AND
+ D.LOCATION_ID = L.LOCATION_ID
+ AND 
+ L.COUNTRY_ID = C.COUNTRY_ID
+ AND
+ C.REGION_ID = R.REGION_ID
+
+ ---OR 
+
+ SELECT DRPARTMENTS.DEPT_ID,DRPARTMENTS.DEPT_NAME,
+ EMPLOYEES.FIRST_NAME,EMPLOYEES.LAST_NAME,
+ LOCATIONS.ADDRESS,LOCATIONS.CITY,
+ COUNTRIES.COUNTRY_NAME,REGIONS.REGION_NAME
+ FROM DEPARTMENTS 
+ JOIN EMPLOYEES
+ ON DEPARTMENTS.DEPT_ID = EMPLOYEES.DEPT_ID
+ JOIN LOCATIONS
+ ON LOCATIONS.COUNTRY_ID = COUNTRIES.COUNTRY_ID
+ JOIN COUNTRIES
+ ON COUNTRIES.REGION_ID = REGIONS.REGION_ID;
+
+
+Q26. Find the avg salary of each dept and order by desc
+
+CREATE TABLE COMPANY(
+EMPLOYEE_ID INT PRIMARY KEY,
+EMPLOYEE_NAME VARCHAR(10),
+DEPARTMENT_NAME VARCHAR(10),
+SALARY INT);
+
+INSERT INTO COMPANY VALUES(1,'RAM','HR',10000);
+INSERT INTO COMPANY VALUES(2,'AMRIT','MRKT',20000);
+INSERT INTO COMPANY VALUES(3,'RAVI','HR',30000);
+INSERT INTO COMPANY VALUES(4,'NITIN','MRKT',40000);
+INSERT INTO COMPANY VALUES(5,'VARUN','IT',50000);
+
+select * from COMPANY;
+SELECT DEPARTMENT_NAME,AVG(SALARY) AS 
+AVERAGE_SALARY FROM COMPANY GROUP BY DEPARTMENT_NAME
+ORDER BY DEPARTMENT_NAME DESC;
+
+
+Q27. Write down correct Query 
+
+Q28. Create table where you can enter the data only having marks greater than 40
+
+CREATE TABLE TABLE_NAME
+(S_ID INT,NAME VARCHAR (255),MARKS INT,CHECK (MARKS>=40));
+
+ SELECT * FROM TABLE_NAME;
+
+ INSERT INTO TABLE_NAME VALUES(01,'ABC', 55);
+ INSERT INTO TABLE_NAME VALUES(02,'XYZ',39);
+ INSERT INTO TABLE_NAME VALUES(03,'LMN',40);
+
+Q29. Display student name who are out of maharashtra and using language hindi and english
+
+create table stu(
+sid int,
+name varchar(255),
+state varchar (255),
+language varchar (255)
+);
+
+insert into stu 
+values (1,'pratik','delhi','hindi'),
+(2,'vedant','maharashtra','english'),
+(3,'ekansh','mp','hindi'),
+(4,'mangesh','haryana','english'),
+(5,'akshay','up','english');
+
+select * from stu
+
+select name,state ,language
+from stu
+where state <> 'maharashtra' 
+or language='hindi' and language = 'english';
+ 
+ ---OR 
+
+select name,state ,language
+from stu
+where state <> 'maharashtra' 
+or language in ('hindi','english');
+
+
+Q30. Extract 5 character from the name ex Praveen
+
+select *, substring (column_name,start,end[length]) from table_name;
+
+select *,
+substring (first_name,1,5) from employees where first_name='praveen'; 
+
+Q31. Table1 - 1,2,2,null
+     Table2 - 2,3,4,null,null
+
+SELECT * FROM TABLE_1 JOIN TABLE_2 ON TABLE_1.COLUMN_NAME = TABLE_2.COLUMN_NAME
+SELECT * FROM TABLE_1 left JOIN TABLE_2 ON TABLE_1.COLUMN_NAME = TABLE_2.COLUMN_NAME
+SELECT * FROM TABLE_1 right JOIN TABLE_2 ON TABLE_1.COLUMN_NAME = TABLE_2.COLUMN_NAME
+SELECT * FROM TABLE_1 full JOIN TABLE_2 ON TABLE_1.COLUMN_NAME = TABLE_2.COLUMN_NAME
+
+note:-Observe output
+
+
+Q32. What is distinct and Group by.
+
+-- Distinct:-
+
+  -- The Sql distinct command is used with SELECT key word to retrieve only distinct or unique data.
+  -- It returns only distinct (different) values.
+  -- In a table there may be a chance to exist a duplicate value and sometimes we want to retrieve only unique values.In such cases, Sql select distinct statement is used.
+
+--- syntax:- 
+
+  select distinct column_name
+  from table_name;
+
+-- Group By:-
+
+  -- The Group By statement is used for organizing similar data into groups. 
+  -- The data is further organized with the help of equivalent function. 
+  -- It means, if different rows in a precise column have the same values, it will arrange those rows in a group.
+  
+  -- few things to remember while using group by clause are:-
+ 
+--- 1) The SELECT statement is used with the GROUP BY clause in the SQL query.
+--- 2) WHERE clause is placed before the GROUP BY clause in SQL.
+--- 3) ORDER BY clause is placed after the GROUP BY clause in SQL.
+
+-- SYNTAX:-
+
+    SELECT column1
+    FROM table_name  
+    WHERE condition  
+    GROUP BY column1 
+    ORDER BY column1;
+
+
+-- Difference Between distinct and group by:-
+
+The major difference between the distinct and group by is, group by operator is meant for the aggregating or grouping rows whereas distinct is just used to get distinct values.
+
